@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fran Parfumz — Perfumería de Autor</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#0D0D0D;--bg-card:#1A1A1A;--bg-section-alt:#111;--text:#F5F5F5;--text-muted:#999;
+--accent:#C0392B;--accent-light:#E74C3C;--accent-dark:#96281B;
+--blue:#3A7BD5;--blue-dark:#0D1B2A;
+--pink:#D4618C;--pink-dark:#1A0F14;
+--radius:12px;--shadow:0 8px 32px rgba(0,0,0,.4);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img{max-width:100%;display:block}
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+section{padding:80px 0}
+
+/* HEADER */
+header{position:fixed;top:0;left:0;width:100%;z-index:1000;padding:16px 0;transition:all .3s}
+header.scrolled{background:rgba(13,13,13,.95);backdrop-filter:blur(10px);padding:10px 0;box-shadow:0 2px 20px rgba(0,0,0,.5)}
+.header-inner{display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.8rem;font-weight:800;letter-spacing:4px;color:var(--accent)}
+.logo span{color:var(--text)}
+nav ul{display:flex;gap:24px}
+nav a{font-size:.85rem;text-transform:uppercase;letter-spacing:2px;position:relative;padding:4px 0;transition:color .3s}
+nav a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--accent);transition:width .3s}
+nav a:hover{color:var(--accent)}
+nav a:hover::after{width:100%}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:26px;height:2px;background:var(--text);transition:all .3s}
+.mobile-nav{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(13,13,13,.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:32px}
+.mobile-nav.active{display:flex}
+.mobile-nav a{font-size:1.2rem;text-transform:uppercase;letter-spacing:3px}
+.mobile-nav-close{position:absolute;top:20px;right:24px;font-size:2rem;cursor:pointer}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:var(--bg)}
+.hero-content{position:relative;z-index:2;text-align:center;width:100%;max-width:800px;margin:0 auto;padding:0 20px}
+.hero-text h1{font-size:4rem;font-weight:800;line-height:1.1;margin-bottom:20px}
+.hero-text h1 span{color:var(--accent)}
+.hero-text p{font-size:1.2rem;color:var(--text-muted);margin-bottom:32px;max-width:600px;margin-left:auto;margin-right:auto}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--radius);font-weight:600;font-size:.9rem;text-transform:uppercase;letter-spacing:1px;transition:all .3s;cursor:pointer;border:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-light);transform:translateY(-2px);box-shadow:0 8px 24px rgba(192,57,43,.4)}
+.btn-outline{border:2px solid var(--accent);color:var(--accent);background:transparent}
+.btn-outline:hover{background:var(--accent);color:#fff}
+
+/* PARTICLES */
+#particles{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+/* SECTION TITLES */
+.section-title{text-align:center;margin-bottom:60px}
+.section-title h2{font-size:2.4rem;font-weight:800;margin-bottom:12px}
+.section-title p{color:var(--text-muted);max-width:560px;margin:0 auto}
+.section-title .line{width:60px;height:3px;background:var(--accent);margin:16px auto 0;border-radius:2px}
+
+/* CATALOG SECTIONS */
+.catalog-section{position:relative;padding:100px 0;overflow:hidden}
+.catalog-section::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;opacity:.15}
+
+.catalog-section.hombre-noche{background:linear-gradient(180deg,#1a0505 0%,#0D0D0D 30%,#120303 100%)}
+.catalog-section.hombre-noche::before{background:radial-gradient(ellipse at 20% 50%,rgba(192,57,43,.15) 0%,transparent 60%),radial-gradient(ellipse at 80% 30%,rgba(150,40,27,.1) 0%,transparent 50%)}
+.catalog-section.hombre-noche .section-title h2{color:#E74C3C;text-shadow:0 0 30px rgba(231,76,60,.3)}
+.catalog-section.hombre-noche .section-title .line{background:linear-gradient(90deg,transparent,#E74C3C,transparent);height:2px;width:100px}
+.catalog-section.hombre-noche .product-card{--glow-color:rgba(231,76,60,.6);--spray-color:rgba(231,76,60,.6)}
+.catalog-section.hombre-noche .product-card:hover{border-color:rgba(231,76,60,.3);box-shadow:0 12px 40px rgba(192,57,43,.2)}
+
+.catalog-section.hombre-dia{background:linear-gradient(180deg,#0a1628 0%,#0D1B2A 30%,#0a1a30 100%)}
+.catalog-section.hombre-dia::before{background:radial-gradient(ellipse at 30% 40%,rgba(58,123,213,.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(40,90,170,.1) 0%,transparent 50%)}
+.catalog-section.hombre-dia .section-title h2{color:#5BA3E8;text-shadow:0 0 30px rgba(91,163,232,.3)}
+.catalog-section.hombre-dia .section-title .line{background:linear-gradient(90deg,transparent,#5BA3E8,transparent);height:2px;width:100px}
+.catalog-section.hombre-dia .product-card{--glow-color:rgba(91,163,232,.6);--spray-color:rgba(91,163,232,.6)}
+.catalog-section.hombre-dia .product-card:hover{border-color:rgba(91,163,232,.3);box-shadow:0 12px 40px rgba(58,123,213,.2)}
+
+.catalog-section.mujer{background:linear-gradient(180deg,#1f0a14 0%,#1A0F14 30%,#200d18 100%)}
+.catalog-section.mujer::before{background:radial-gradient(ellipse at 50% 30%,rgba(212,97,140,.15) 0%,transparent 60%),radial-gradient(ellipse at 20% 80%,rgba(180,70,120,.1) 0%,transparent 50%)}
+.catalog-section.mujer .section-title h2{color:#E88CB8;text-shadow:0 0 30px rgba(232,140,184,.3)}
+.catalog-section.mujer .section-title .line{background:linear-gradient(90deg,transparent,#E88CB8,transparent);height:2px;width:100px}
+.catalog-section.mujer .product-card{--glow-color:rgba(232,140,184,.6);--spray-color:rgba(232,140,184,.6)}
+.catalog-section.mujer .product-card:hover{border-color:rgba(232,140,184,.3);box-shadow:0 12px 40px rgba(212,97,140,.2)}
+
+/* SETS */
+.catalog-section.sets{background:linear-gradient(180deg,#1a1400 0%,#0D0D0D 30%,#151000 100%)}
+.catalog-section.sets::before{background:radial-gradient(ellipse at 40% 40%,rgba(218,165,32,.12) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(180,130,20,.08) 0%,transparent 50%)}
+.catalog-section.sets .section-title h2{color:#DAA520;text-shadow:0 0 30px rgba(218,165,32,.3)}
+.catalog-section.sets .section-title .line{background:linear-gradient(90deg,transparent,#DAA520,transparent);height:2px;width:100px}
+.catalog-section.sets .product-card{--glow-color:rgba(218,165,32,.5);--spray-color:rgba(218,165,32,.6)}
+.catalog-section.sets .product-card:hover{border-color:rgba(218,165,32,.3);box-shadow:0 12px 40px rgba(180,130,20,.2)}
+
+/* SPRAY */
+.catalog-section.spray{background:linear-gradient(180deg,#0a1a0a 0%,#0D0D0D 30%,#0a150a 100%)}
+.catalog-section.spray::before{background:radial-gradient(ellipse at 40% 40%,rgba(46,204,113,.10) 0%,transparent 60%),radial-gradient(ellipse at 70% 70%,rgba(39,174,96,.07) 0%,transparent 50%)}
+.catalog-section.spray .section-title h2{color:#2ECC71;text-shadow:0 0 30px rgba(46,204,113,.3)}
+.catalog-section.spray .section-title .line{background:linear-gradient(90deg,transparent,#2ECC71,transparent);height:2px;width:100px}
+.catalog-section.spray .product-card{--glow-color:rgba(46,204,113,.5);--spray-color:rgba(46,204,113,.6)}
+.catalog-section.spray .product-card:hover{border-color:rgba(46,204,113,.3);box-shadow:0 12px 40px rgba(39,174,96,.2)}
+
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:28px}
+.product-card{background:rgba(255,255,255,.03);border-radius:16px;padding:28px 24px;border:1px solid rgba(255,255,255,.08);transition:all .5s cubic-bezier(.4,0,.2,1);position:relative;overflow:visible;cursor:pointer}
+.product-card:hover{transform:translateY(-8px);border-color:rgba(255,255,255,.2);box-shadow:0 12px 40px rgba(0,0,0,.5)}
+.product-card .badge{position:absolute;top:16px;right:16px;padding:4px 12px;border-radius:20px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;z-index:2}
+
+/* BOTTLE IMAGE WRAP */
+.bottle-wrap{position:relative;display:flex;justify-content:center;align-items:center;height:240px;margin-bottom:16px;overflow:visible}
+.bottle-wrap img{width:100%;max-width:200px;height:220px;object-fit:contain;transition:transform .5s cubic-bezier(.4,0,.2,1),filter .4s;filter:drop-shadow(0 4px 20px rgba(0,0,0,.5));position:relative;z-index:1;background:none}
+.product-card:hover .bottle-wrap img{transform:scale(1.06) translateY(-4px);filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
+.product-card.active .bottle-wrap img{transform:scale(1.1) translateY(-8px);filter:drop-shadow(0 12px 40px rgba(0,0,0,.7))}
+
+/* SPRAY PARTICLES */
+.spray-wrap{position:absolute;top:-5px;left:50%;transform:translateX(-50%);width:80px;height:120px;pointer-events:none;opacity:0;transition:opacity .3s;z-index:15}
+.product-card.active .spray-wrap{opacity:1}
+.spray-particle{position:absolute;border-radius:50%;animation:sprayUp 1.4s ease-out infinite;opacity:0}
+.spray-particle:nth-child(1){width:6px;height:6px;left:35%;animation-delay:0s;background:var(--spray-color,rgba(192,57,43,.8))}
+.spray-particle:nth-child(2){width:5px;height:5px;left:50%;animation-delay:.18s;background:var(--spray-color,rgba(231,76,60,.7))}
+.spray-particle:nth-child(3){width:7px;height:7px;left:65%;animation-delay:.36s;background:var(--spray-color,rgba(192,57,43,.6))}
+.spray-particle:nth-child(4){width:4px;height:4px;left:42%;animation-delay:.54s;background:var(--spray-color,rgba(231,76,60,.7))}
+.spray-particle:nth-child(5){width:5px;height:5px;left:58%;animation-delay:.72s;background:var(--spray-color,rgba(192,57,43,.8))}
+.spray-particle:nth-child(6){width:6px;height:6px;left:30%;animation-delay:.9s;background:var(--spray-color,rgba(231,76,60,.5))}
+.spray-particle:nth-child(7){width:4px;height:4px;left:70%;animation-delay:1.08s;background:var(--spray-color,rgba(192,57,43,.6))}
+@keyframes sprayUp{0%{transform:translateY(0) scale(1);opacity:0}12%{opacity:1}50%{transform:translateY(-60px) scale(1.6);opacity:.5}100%{transform:translateY(-120px) scale(.4);opacity:0}}
+
+/* GLOW on active */
+.product-card.active::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--glow-color,rgba(192,57,43,.15)) 0%,transparent 70%);pointer-events:none;z-index:0;animation:pulseGlow 2s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{opacity:.5;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+
+.product-card h3{font-size:1.1rem;font-weight:700;margin-bottom:4px}
+.product-type{font-size:.75rem;text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;opacity:.55}
+.product-notes{max-height:0;overflow:hidden;transition:max-height .5s ease,opacity .4s ease;opacity:0}
+.product-card.active .product-notes{max-height:300px;opacity:1}
+.product-notes p{font-size:.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:12px}
+.select-btn{display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:8px 16px;border-radius:8px;background:rgba(255,255,255,.08);color:var(--text);font-size:.8rem;font-weight:600;border:1px solid rgba(255,255,255,.12);transition:all .3s;cursor:pointer}
+.select-btn:hover{background:rgba(255,255,255,.15)}
+.product-card.active .select-btn{background:var(--accent);border-color:var(--accent);color:#fff}
+.whatsapp-btn{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:10px 20px;border-radius:8px;background:#25D366;color:#fff;font-size:.82rem;font-weight:600;transition:all .3s;border:none;cursor:pointer}
+.whatsapp-btn:hover{background:#20BD5A;transform:translateY(-2px)}
+.placeholder-card{grid-column:1/-1;text-align:center;padding:80px 40px;border:2px dashed rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.02)}
+.placeholder-card h3{font-size:1.4rem;margin-bottom:8px;opacity:.5}
+.placeholder-card p{color:var(--text-muted);opacity:.4}
+
+/* VENTAS / METRICS */
+.ventas{background:var(--bg-section-alt)}
+.metrics-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-bottom:48px}
+.metric-card{background:var(--bg-card);border-radius:var(--radius);padding:32px;text-align:center;border:1px solid rgba(255,255,255,.06);transition:all .3s}
+.metric-card:hover{border-color:var(--accent);transform:translateY(-4px)}
+.metric-card .number{font-size:2.4rem;font-weight:800;color:var(--accent);margin-bottom:4px}
+.metric-card .label{font-size:.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px}
+.chart-container{background:var(--bg-card);border-radius:var(--radius);padding:32px;border:1px solid rgba(255,255,255,.06)}
+.chart-container h3{margin-bottom:24px;font-size:1.1rem}
+.chart-bar{display:flex;align-items:center;margin-bottom:16px}
+.chart-bar .bar-label{width:160px;font-size:.85rem;flex-shrink:0}
+.chart-bar .bar-track{flex:1;height:28px;background:rgba(255,255,255,.05);border-radius:6px;overflow:hidden;position:relative}
+.chart-bar .bar-fill{height:100%;border-radius:6px;transition:width 1.2s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:.75rem;font-weight:700}
+
+/* NOSOTROS */
+.nosotros{background:var(--bg);position:relative}
+.nosotros-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.nosotros-text h2{font-size:2rem;font-weight:800;margin-bottom:20px}
+.nosotros-text h2 span{color:var(--accent)}
+.nosotros-text p{color:var(--text-muted);margin-bottom:16px;line-height:1.7}
+.nosotros-visual{display:flex;justify-content:center}
+.nosotros-visual svg{width:100%;max-width:320px;filter:drop-shadow(0 10px 30px rgba(192,57,43,.2))}
+
+/* CONTACTO */
+.contacto{background:var(--bg-section-alt)}
+.contacto-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px}
+.contact-info h3{font-size:1.3rem;margin-bottom:20px}
+.contact-info p{color:var(--text-muted);margin-bottom:24px}
+.contact-detail{display:flex;align-items:center;gap:12px;margin-bottom:16px;color:var(--text-muted)}
+.contact-detail svg{width:20px;height:20px;flex-shrink:0}
+.contact-form{display:flex;flex-direction:column;gap:16px}
+.contact-form input,.contact-form textarea{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:14px 16px;color:var(--text);font-size:.95rem;font-family:inherit;transition:border .3s}
+.contact-form input:focus,.contact-form textarea:focus{outline:none;border-color:var(--accent)}
+.contact-form textarea{min-height:120px;resize:vertical}
+
+/* FOOTER */
+footer{background:var(--bg);border-top:1px solid rgba(255,255,255,.06);padding:40px 0;text-align:center}
+footer p{color:var(--text-muted);font-size:.85rem}
+footer .logo{margin-bottom:12px;font-size:1.4rem}
+
+/* SCROLL REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* WHATSAPP FAB */
+.whatsapp-fab{position:fixed;bottom:24px;right:24px;z-index:900;background:#25D366;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);transition:all .3s;cursor:pointer}
+.whatsapp-fab:hover{transform:scale(1.1);box-shadow:0 6px 28px rgba(37,211,102,.5)}
+.whatsapp-fab svg{width:28px;height:28px;fill:#fff}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav ul{display:none}
+  .hamburger{display:flex}
+  .hero-text h1{font-size:2.4rem}
+  .hero-text p{font-size:1rem}
+  .hero-btns{justify-content:center}
+  .nosotros-grid,.contacto-grid{grid-template-columns:1fr}
+  .chart-bar .bar-label{width:100px;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+
+<div id="particles"></div>
+
+<header id="header">
+  <div class="container header-inner">
+    <a href="#" class="logo">Fran Parfumz<span>.</span></a>
+    <nav>
+      <ul>
+        <li><a href="#hombre-noche">Hombre Noche</a></li>
+        <li><a href="#hombre-dia">Hombre Día</a></li>
+        <li><a href="#mujer">Mujer</a></li>
+        <li><a href="#sets">Sets</a></li>
+        <li><a href="#spray">Sprays</a></li>
+        <li><a href="#ventas">Ventas</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+      </ul>
+    </nav>
+    <div class="hamburger" onclick="toggleMobileNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-nav" id="mobileNav">
+  <div class="mobile-nav-close" onclick="toggleMobileNav()">×</div>
+  <a href="#hombre-noche" onclick="toggleMobileNav()">Hombre Noche</a>
+  <a href="#hombre-dia" onclick="toggleMobileNav()">Hombre Día</a>
+  <a href="#mujer" onclick="toggleMobileNav()">Mujer</a>
+  <a href="#sets" onclick="toggleMobileNav()">Sets</a>
+  <a href="#spray" onclick="toggleMobileNav()">Sprays</a>
+  <a href="#ventas" onclick="toggleMobileNav()">Ventas</a>
+  <a href="#nosotros" onclick="toggleMobileNav()">Nosotros</a>
+  <a href="#contacto" onclick="toggleMobileNav()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-content">
+    <div class="hero-text">
+      <h1>El arte de <span>ser distinto</span></h1>
+      <p>Perfumes de autor que definen tu esencia. Fragancias exclusivas creadas para quienes buscan algo más que un aroma.</p>
+      <div class="hero-btns">
+        <a href="#hombre-noche" class="btn btn-primary">Explorar Colecciones</a>
+        <a href="#nosotros" class="btn btn-outline">Nuestra Historia</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOMBRE NOCHE -->
+<section class="catalog-section hombre-noche" id="hombre-noche">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Hombre Noche</h2>
+      <p>Fragancias intensas para las noches más memorables</p>
+      <div class="line"></div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.112706.jpg" alt="Rasasi Hawas Kobra">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Rasasi Hawas Kobra</h3>
+        <div class="product-type">Eau de Parfum para Hombre</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Jengibre, Bergamota, Mandarina<br><strong>Notas de Corazón:</strong> Té Verde, Canela, Neroli<br><strong>Notas de Fondo:</strong> Musk, Notas Amaderadas, Ámbar</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Rasasi%20Hawas%20Kobra.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.83132.jpg" alt="Mandary Sky">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Mandary Sky</h3>
+        <div class="product-type">Amaderado Oriental</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p>Notas de mandarina dulce, caramelo y un secado amaderado. Una fragancia que envuelve la noche con calidez y sofisticación.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Mandary%20Sky.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.106709.jpg" alt="Mandaryn Sky Elixir">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Mandaryn Sky Elixir</h3>
+        <div class="product-type">Oriental Dulce</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Caramelo, mandarina.<br><strong>Notas de fondo:</strong> Vainilla, vetiver.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Mandaryn%20Sky%20Elixir.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.51816.jpg" alt="Al Haramain Amber Oud Gold Edition">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Al Haramain Amber Oud Gold</h3>
+        <div class="product-type">Oriental Amaderado</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Bergamota, notas verdes.<br><strong>Notas de corazón:</strong> Melón, piña, notas dulces, ámbar.<br><strong>Notas de fondo:</strong> Almizcle, vainilla, notas amaderadas.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Al%20Haramain%20Amber%20Oud%20Gold.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.123217.jpg" alt="Rasasi Hawas London">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Rasasi Hawas London</h3>
+        <div class="product-type">Oriental Amaderado</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Pimienta rosa, azafrán, pera.<br><strong>Notas de corazón:</strong> Rosa, incienso (olíbano), flores blancas.<br><strong>Notas de fondo:</strong> Maderas rubias, ámbar, almizcle, vainilla.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Rasasi%20Hawas%20London.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.64105.jpg" alt="Club de Nuit Sillage">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Club de Nuit Sillage</h3>
+        <div class="product-type">Floral Amaderado</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Bergamota, grosellas negras, limón, lima, hojas de violeta, jengibre.<br><strong>Notas de corazón:</strong> Rosa, lirio de los valles, jazmín, iris.<br><strong>Notas de fondo:</strong> Ambroxan, almizcle, sándalo, cedro.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Club%20de%20Nuit%20Sillage.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.90407.jpg" alt="Armaf Tag Him Uomo Rosso">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Tag Him Uomo Rosso</h3>
+        <div class="product-type">Eau de Parfum para Hombre</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Lavanda, Cardamomo, Notas Aromáticas<br><strong>Notas de Corazón:</strong> Notas Especiadas, Pimienta Negra<br><strong>Notas de Fondo:</strong> Vainilla, Tonka, Incienso, Pachulí</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Armaf%20Tag%20Him%20Uomo%20Rosso.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- HOMBRE DÍA -->
+<section class="catalog-section hombre-dia" id="hombre-dia">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Hombre Día / "Otra"</h2>
+      <p>Fragancias frescas y versátiles para el día a día</p>
+      <div class="line"></div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.112309.jpg" alt="Rasasi Hawas Atlantis">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Rasasi Hawas Atlantis</h3>
+        <div class="product-type">Eau de Parfum Unisex</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Bergamota, Limón, Manzana, Canela<br><strong>Notas de Corazón:</strong> Notas Acuáticas, Ciruela, Cardamomo, Azahar<br><strong>Notas de Fondo:</strong> Madera Flotante, Ámbar Gris, Pachulí, Musk</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Rasasi%20Hawas%20Atlantis.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.77860.jpg" alt="Club de Nuit Urban Man Elixir">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Club de Nuit Urban Man Elixir</h3>
+        <div class="product-type">Fresco Aromático</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Piña, bergamota.<br><strong>Notas de corazón:</strong> Rosa, jazmín.<br><strong>Notas de fondo:</strong> Ambroxan, almizcle.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Club%20de%20Nuit%20Urban%20Man%20Elixir.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.913.jpg" alt="Nautica Voyage">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Nautica Voyage</h3>
+        <div class="product-type">Fresco Aromático</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Manzana verde, hojas verdes.<br><strong>Notas de corazón:</strong> Flor de loto, mimosa.<br><strong>Notas de fondo:</strong> Almizcle, cedro, ámbar, musgo de roble.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Nautica%20Voyage.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.83133.jpg" alt="Armaf Odyssey Mega">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Odyssey Mega Limited Edition</h3>
+        <div class="product-type">Fresco Especiado</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Bergamota, naranja, jengibre, limón, menta.<br><strong>Notas de corazón:</strong> Enebro de Virginia, geranio, salvia, piña.<br><strong>Notas de fondo:</strong> Tonka, cedro, vetiver, almizcle.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Armaf%20Odyssey%20Mega.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.103875.jpg" alt="Bharara Viking Beirut">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Bharara Viking Beirut</h3>
+        <div class="product-type">Cítrico Aromático</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Bergamota, limón, naranja.<br><strong>Notas de corazón:</strong> Notas florales, jazmín, especias suaves.<br><strong>Notas de fondo:</strong> Madera de cedro, ámbar, almizcle, notas amaderadas.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Bharara%20Viking%20Beirut.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.73020.jpg" alt="Dumont Nitro Pour Homme">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Dumont Nitro Pour Homme</h3>
+        <div class="product-type">Amaderado Aromático</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Bergamota, lavanda, manzana, limón.<br><strong>Notas de corazón:</strong> Notas acuáticas, flor de azahar, nuez moscada.<br><strong>Notas de fondo:</strong> Vainilla, ámbar, haba tonka, cedro, pachulí.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Dumont%20Nitro%20Pour%20Homme.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.132745.jpg" alt="Bharara King Solei">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Bharara King Solei</h3>
+        <div class="product-type">Eau de Parfum Unisex</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Naranja Siciliana, Bergamota de Calabria, Limón Siciliano<br><strong>Notas de Corazón:</strong> Jazmín, Sándalo, Bálsamo de Copahu, Madera Cashmere, Ámbar Gris<br><strong>Notas de Fondo:</strong> Vainilla de Madagascar, Chocolate, Avellana, Azahar, Bencina de Siam</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Bharara%20King%20Solei.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://xcdn.next.co.uk/common/items/default/default/itemimages/3_4Ratio/product/lge/D91949s.jpg?im=Resize,width=600" alt="Next Code Red">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Next Code Red</h3>
+        <div class="product-type">Eau de Parfum para Hombre</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Pomelo, Notas Ozónicas<br><strong>Notas de Corazón:</strong> Hoja de Laurel, Jazmín<br><strong>Notas de Fondo:</strong> Musgo de Roble, Pachulí</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Next%20Code%20Red.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SETS -->
+<section class="catalog-section sets" id="sets">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Sets de Regalo</h2>
+      <p>Regalos exclusivos para los amantes de las fragancias</p>
+      <div class="line"></div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://armaf.com/cdn/shop/files/CLUBDENUITINTENSEMANGIFTSET_4b719408-1ee0-4c57-b729-bc738d1aeb9b.png?v=1770765386&width=600" alt="Club de Nuit Intense Man Gift Set">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Club de Nuit Intense Man — Gift Set 4pcs</h3>
+        <div class="product-type">Set de Regalo</div>
+        <div class="select-btn">🔍 Ver Contenido</div>
+        <div class="product-notes">
+          <p><strong>Incluye:</strong> 3.4 oz Eau de Parfum + 10ml Travel Spray + 3.4 oz Shower Gel + 6.8 oz Body Spray.<br><strong>Notas:</strong> Limón, piña, bergamota, grosellas negras, manzana, abedul, jazmín, rosa, almizcle, ámbar gris, pachulí, vainilla.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Set%20Club%20de%20Nuit%20Intense%20Man.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.89454.jpg" alt="Lattafa Pride Vintage Radio Set">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Lattafa Pride Vintage Radio — Gift Set 3pcs</h3>
+        <div class="product-type">Set de Regalo</div>
+        <div class="select-btn">🔍 Ver Contenido</div>
+        <div class="product-notes">
+          <p><strong>Incluye:</strong> 100ml EDP + 200ml Body Spray + 20ml Pocket EDP.<br><strong>Notas:</strong> Ciruela, lavanda, bergamota, palo de rosa de Brasil, pimienta negra, iris, sándalo, ámbar.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Set%20Lattafa%20Pride%20Vintage%20Radio.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://armaf.com/cdn/shop/files/TAGHIMGFTSET.png?v=1766007327&width=600" alt="Armaf Tag Him Gift Set">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Tag Him — Gift Set</h3>
+        <div class="product-type">Set de Regalo</div>
+        <div class="select-btn">🔍 Ver Contenido</div>
+        <div class="product-notes">
+          <p><strong>Incluye:</strong> EDP + Body Spray + Travel Spray.<br><strong>Notas:</strong> Cítricos frescos, jengibre especiado, cedro cálido. Un set perfecto para regalar.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Set%20Armaf%20Tag%20Him.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SPRAY -->
+<section class="catalog-section spray" id="spray">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Sprays Corporales</h2>
+      <p>Frescura y aroma todo el día al mejor precio</p>
+      <div class="line"></div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://www.lattafa.my/cdn/perfumes/lattafa/asad-bourbon-nusentral-glass-bridge-100ml-edp/public/" alt="Asad Bourbon Body Spray">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Lattafa Asad Bourbon — Body Spray</h3>
+        <div class="product-type">Body Spray 200ml</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Lavanda, Mirabela, Pimienta Rosa<br><strong>Notas de Corazón:</strong> Cacao, Nuez Moscada, Davana<br><strong>Notas de Fondo:</strong> Vainilla Bourbon, Ámbar, Vetiver</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Body%20Spray%20Asad%20Bourbon.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.126960.jpg" alt="Odyssey Spectra Body Spray">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Odyssey Spectra — Body Spray</h3>
+        <div class="product-type">Body Spray 200ml</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de Salida:</strong> Bergamota, Canela, Manzana<br><strong>Notas de Corazón:</strong> Lavanda, Azahar, Lirio del Valle, Canela<br><strong>Notas de Fondo:</strong> Vainilla, Tabaco, Tonka, Pachulí, Ámbar</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20el%20Body%20Spray%20Odyssey%20Spectra.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MUJER -->
+<section class="catalog-section mujer" id="mujer">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Mujer</h2>
+      <p>Elegancia y sensualidad en cada gota</p>
+      <div class="line"></div>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.96990.jpg" alt="Armaf Odyssey Candee">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Odyssey Candee</h3>
+        <div class="product-type">Floral Gourmand</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Fresa, frambuesa, durazno, bergamota, geranio.<br><strong>Notas de corazón:</strong> Caramelo, maracuyá, jazmín.<br><strong>Notas de fondo:</strong> Ámbar, pachulí, almizcle.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Armaf%20Odyssey%20Candee.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+      <div class="product-card reveal">
+        <div class="bottle-wrap">
+          <img src="https://fimgs.net/mdimg/perfume/social.115132.jpg" alt="Armaf Odyssey Marshmallow">
+          <div class="spray-wrap"><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span><span class="spray-particle"></span></div>
+        </div>
+        <h3>Armaf Odyssey Marshmallow</h3>
+        <div class="product-type">Floral Gourmand</div>
+        <div class="select-btn">🔍 Ver Notas</div>
+        <div class="product-notes">
+          <p><strong>Notas de salida:</strong> Coco, manzana, limón, peonía, lirio del valle.<br><strong>Notas de corazón:</strong> Malvavisco, fresa, frambuesa, durazno, albaricoque, naranja.<br><strong>Notas de fondo:</strong> Queso mascarpone, vainilla, praliné, almizcle, tonka, ámbar.</p>
+        </div>
+        <a href="https://wa.me/50683605914?text=Hola%2C%20me%20interesa%20Armaf%20Odyssey%20Marshmallow.%20%C2%BFTienen%20disponibilidad%3F" target="_blank" class="whatsapp-btn">💬 Consultar por WhatsApp</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VENTAS / MÉTRICAS -->
+<section class="ventas" id="ventas">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Números que hablan</h2>
+      <p>El respaldo de nuestros clientes y la calidad de nuestros productos</p>
+      <div class="line"></div>
+    </div>
+    <div class="metrics-row reveal">
+      <div class="metric-card">
+        <div class="number">1,200+</div>
+        <div class="label">Clientes Felices</div>
+      </div>
+      <div class="metric-card">
+        <div class="number">85</div>
+        <div class="label">Fragancias</div>
+      </div>
+      <div class="metric-card">
+        <div class="number">98%</div>
+        <div class="label">Satisfacción</div>
+      </div>
+      <div class="metric-card">
+        <div class="number">5+</div>
+        <div class="label">Años de Experiencia</div>
+      </div>
+    </div>
+    <div class="chart-container reveal">
+      <h3>Top Ventas del Mes</h3>
+      <div id="chart"></div>
+    </div>
+  </div>
+</section>
+
+<!-- NOSOTROS -->
+<section class="nosotros" id="nosotros">
+  <div class="container nosotros-grid">
+    <div class="nosotros-text reveal">
+      <h2>La <span>pasión</span> por las fragancias</h2>
+      <p>En Fran Parfumz creemos que cada persona merece un aroma que cuente su historia. Nuestras fragancias están diseñadas con ingredientes selects de todo el mundo.</p>
+      <p>Cada botella representa horas de investigación, ingredientes premium y un compromiso inquebrantable con la calidad.</p>
+      <a href="#contacto" class="btn btn-primary" style="margin-top:16px">Contáctanos</a>
+    </div>
+    <div class="nosotros-visual reveal">
+      <img src="https://fimgs.net/mdimg/perfume/social.83132.jpg" alt="Fran Parfumz Colección" style="width:100%;max-width:360px;border-radius:16px;box-shadow:0 10px 40px rgba(192,57,43,.3)">
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Contáctanos</h2>
+      <p>¿Tienes alguna pregunta? Escríbenos y te responderemos pronto</p>
+      <div class="line"></div>
+    </div>
+    <div class="contacto-grid">
+      <div class="contact-info reveal">
+        <h3>Hablemos</h3>
+        <p>Estamos aquí para ayudarte a encontrar la fragancia perfecta.</p>
+        <div class="contact-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          <span>WhatsApp: 506 8360 5914</span>
+        </div>
+        <div class="contact-detail">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Costa Rica</span>
+        </div>
+      </div>
+      <form class="contact-form reveal" id="contactForm" onsubmit="return sendWhatsApp(event)">
+        <input type="text" placeholder="Tu nombre" required id="cf-name">
+        <input type="text" placeholder="Tu teléfono o email" required id="cf-contact">
+        <textarea placeholder="Tu mensaje..." required id="cf-msg"></textarea>
+        <button type="submit" class="btn btn-primary">Enviar por WhatsApp</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">Fran Parfumz<span>.</span></div>
+    <p>&copy; 2026 Fran Parfumz Perfumería de Autor. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<a href="https://wa.me/50683605914" target="_blank" class="whatsapp-fab" title="Chatea con nosotros">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<script>
+// DATA
+var chartData = [
+  {label:'Mandary Sky',val:92,color:'#C0392B'},
+  {label:'Club de Nuit Urban',val:78,color:'#3A7BD5'},
+  {label:'Nautica Voyage',val:65,color:'#3A7BD5'},
+  {label:'Amber Oud Gold',val:58,color:'#C0392B'},
+  {label:'Armaf Odyssey Mega',val:50,color:'#3A7BD5'},
+  {label:'Bharara Viking',val:42,color:'#3A7BD5'}
+];
+var badgeClasses = {'Fresco':'badge-fresh','Nuevo':'badge-new','Best Seller':'badge-bestseller','Exclusivo':'badge-exclusive'};
+
+function renderChart() {
+  var c = document.getElementById('chart');
+  var html = '';
+  for (var i = 0; i < chartData.length; i++) {
+    var d = chartData[i];
+    html += '<div class="chart-bar reveal">' +
+      '<div class="bar-label">' + d.label + '</div>' +
+      '<div class="bar-track"><div class="bar-fill" style="width:0;background:' + d.color + '" data-w="' + d.val + '%">' + d.val + '%</div></div>' +
+      '</div>';
+  }
+  c.innerHTML = html;
+}
+
+document.addEventListener('click', function(e) {
+  var card = e.target.closest('.product-card');
+  if (!card) return;
+  var wasActive = card.classList.contains('active');
+  document.querySelectorAll('.product-card.active').forEach(function(c) { c.classList.remove('active'); });
+  if (!wasActive) card.classList.add('active');
+});
+
+renderChart();
+
+// SCROLL REVEAL
+function revealElements() {
+  var els = document.querySelectorAll('.reveal');
+  for (var i = 0; i < els.length; i++) {
+    var r = els[i].getBoundingClientRect();
+    if (r.top < window.innerHeight - 60) {
+      els[i].classList.add('visible');
+      // animate bars
+      var bars = els[i].querySelectorAll('.bar-fill');
+      for (var j = 0; j < bars.length; j++) {
+        bars[j].style.width = bars[j].getAttribute('data-w');
+      }
+    }
+  }
+}
+window.addEventListener('scroll', revealElements);
+window.addEventListener('load', revealElements);
+
+// HEADER SCROLL
+var header = document.getElementById('header');
+window.addEventListener('scroll', function() {
+  header.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// MOBILE NAV
+function toggleMobileNav() {
+  document.getElementById('mobileNav').classList.toggle('active');
+}
+
+// WHATSAPP FORM
+function sendWhatsApp(e) {
+  e.preventDefault();
+  var name = document.getElementById('cf-name').value;
+  var contact = document.getElementById('cf-contact').value;
+  var msg = document.getElementById('cf-msg').value;
+  var text = 'Hola, soy ' + name + '. (' + contact + ') ' + msg;
+  window.open('https://wa.me/50683605914?text=' + encodeURIComponent(text), '_blank');
+  document.getElementById('contactForm').reset();
+  return false;
+}
+
+// PARTICLES
+(function() {
+  var canvas = document.createElement('canvas');
+  canvas.id = 'particleCanvas';
+  var style = document.getElementById('particles');
+  style.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  function Particle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 2 + 0.5;
+    this.alpha = Math.random() * 0.3 + 0.05;
+  }
+  for (var i = 0; i < 60; i++) particles.push(new Particle());
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(192,57,43,' + p.alpha + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
